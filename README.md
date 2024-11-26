@@ -19,3 +19,7 @@
 Once you have made changes to your code, you can push your code to Apps Scripts by running `npx clasp push`.
 
 ! Be aware, this will overwrite all changes made directly on Apps Scripts, so be sure you are not losing anything before running this command !
+
+## Deploying the project
+
+Run `npx clasp deploy -d MastersheetLib`. This will make a new version of the script and deploy it as a library.
