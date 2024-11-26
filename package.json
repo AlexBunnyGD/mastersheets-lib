@@ -1,0 +1,9 @@
+{
+  "name": "mastersheets-lib",
+  "version": "1.0.0",
+  "repository": "https://github.com/dmgincs/mastersheets-lib",
+  "license": "MIT",
+  "devDependencies": {
+    "@google/clasp": "^2.4.2"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "timeZone": "Europe/Berlin",
+  "dependencies": {
+    "libraries": [
+      {
+        "userSymbol": "ArrayLib",
+        "version": "13",
+        "libraryId": "1r9wNWbta3ebuYL4ENAdIp4UYKmyNiWf1AqsXYzfXduRHhTZEeTxS9MhZ"
+      }
+    ]
+  },
+  "exceptionLogging": "STACKDRIVER",
+  "runtimeVersion": "V8"
+}
