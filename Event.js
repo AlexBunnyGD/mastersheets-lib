@@ -106,7 +106,7 @@ function importEvents(divSheet, csvEventSheet, apiKey) {
 
   const staff = getHosts(divSheet);
 
-  let apiUrl = `https://api.dmginc.gg/v3/emt/events/all?page=1&filter.start_date=%24gte%3A${startDate}&filter.end_date=%24lte%3A${endDate}&filter.host_id=%24in%3A`;
+  let apiUrl = `https://api.kuber.dmginc.gg/v3/emt/events/all?page=1&filter.start_date=%24gte%3A${startDate}&filter.end_date=%24lte%3A${endDate}&filter.host_id=%24in%3A`;
 
   for (var i = 0; i < staff.length; i++) {
     apiUrl += staff[i];

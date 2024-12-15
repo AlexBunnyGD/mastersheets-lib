@@ -1,5 +1,3 @@
-
-
 function updateDrops(divSheet, dropsSheet, csvHeaders) {
   let newDrops = [];
 

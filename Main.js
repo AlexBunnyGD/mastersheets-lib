@@ -18,7 +18,7 @@ function importCSV(sheetID, division, apiKey) {
 
   // Get csv
   let today = Utilities.formatDate(new Date(), "EST", "yyyy/MM/dd");
-  let csvUrl = "https://api.dmginc.gg/v3/csv/download/" + today;
+  let csvUrl = "https://api.kuber.dmginc.gg/v3/csv/download/" + today;
 
   // Set API Key Headers
   const headers = {
