@@ -1,6 +1,6 @@
 function fetchFromDamageIncApi(link, apiKey) {
-  console.log("Getting Data...")
-  console.log(link)
+  // console.log("[Event Schedule] Getting Data...")
+  // console.log("[Event Schedule] " + link)
 
   const headers = {
     'X-ApiKey': apiKey
@@ -10,18 +10,18 @@ function fetchFromDamageIncApi(link, apiKey) {
     'headers': headers
   };
 
-  console.log("Fetching...")
+  // console.log("[Event Schedule] Fetching...")
   const response = UrlFetchApp.fetch(link, options);
-  console.log("Done!")
+  // console.log("[Event Schedule] Done!")
 
   //const content = response.getContentText();
-    //console.log('Server response:', content);
+    //// console.log('Server response:', content);
 
   let data = response.getContentText();
-  console.log("Parsing to JSON...")
+  // console.log("[Event Schedule] Parsing to JSON...")
 
   let parsedData = JSON.parse(data);
-  console.log("Done!")
+  // console.log("[Event Schedule] Done!")
 
   // Get the max page from the metadata of the response
   const totalPages = parsedData.meta.totalPages;
@@ -29,7 +29,7 @@ function fetchFromDamageIncApi(link, apiKey) {
   // Initialize an empty array to store the concatenated results
   let allResults = [];
 
-  console.log("Combing through Pages...")
+  // console.log("[Event Schedule] Combing through Pages...")
 
   // Concatenate the results for the first page to the allResults array
   allResults = allResults.concat(parsedData.data);
@@ -47,13 +47,13 @@ function fetchFromDamageIncApi(link, apiKey) {
     // Concatenate the results for the current page to the allResults array
     allResults = allResults.concat(parsedData.data);
   }
-  console.log("Done!")
+  // console.log("[Event Schedule] Done!")
 
   return allResults
 }
 
 function getHosts(divSheet) {
-  console.log("Getting Hosts...")
+  // console.log("[Event Schedule] Getting Hosts...")
 
   var searchValues = ["Active"]; // replace with an array of search values
   var data = divSheet.getDataRange().getValues();
@@ -67,7 +67,7 @@ function getHosts(divSheet) {
       colAValues.push(intValue.toString().split(".")[0]);
     }
   }
-  console.log("Done!")
+  // console.log("[Event Schedule] Done!")
 
   return colAValues;
 }
@@ -84,7 +84,6 @@ function seperateDateandTime(dateString) {
     .000: Milliseconds (zero in this case)
     Z: Time zone offset (UTC)
   */
-  console.log("Seperating DateString...")
 
   var year = dateString.slice(0, 4);
   var month = dateString.slice(5, 7);
@@ -93,8 +92,6 @@ function seperateDateandTime(dateString) {
   var minute = dateString.slice(14, 16);
 
   var dateTime = day + "/" + month + "/" + year + " " + hour + ":" + minute;
-
-  console.log("Done!")
 
   return dateTime;
 }
@@ -106,7 +103,7 @@ function importEvents(divSheet, csvEventSheet, apiKey) {
 
   const staff = getHosts(divSheet);
 
-  let apiUrl = `https://api.dmginc.gg/v3/emt/events/all?page=1&filter.start_date=%24gte%3A${startDate}&filter.end_date=%24lte%3A${endDate}&filter.host_id=%24in%3A`;
+  let apiUrl = `https://api.kuber.dmginc.gg/v3/emt/events/all?page=1&filter.start_date=%24gte%3A${startDate}&filter.end_date=%24lte%3A${endDate}&filter.host_id=%24in%3A`;
 
   for (var i = 0; i < staff.length; i++) {
     apiUrl += staff[i];

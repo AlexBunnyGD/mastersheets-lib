@@ -1,4 +1,4 @@
-function importCSV(sheetID, division, apiKey) {
+function updateMastersheet(sheetID, division, apiKey) {
   const ss = SpreadsheetApp.openById(sheetID);
   const overview = ss.getSheetByName('Overview');
   const initiateLog = ss.getSheetByName('Initiate Log');
@@ -16,67 +16,8 @@ function importCSV(sheetID, division, apiKey) {
   var csvHeaders = backupSheet.getDataRange().getValues()[0];
   const noInactives = ['rank','L6','L5','L4','L3','Elite','Veteran','Senior','Member','Initiate','Away','Probation'];
 
-  // Get csv
-  let today = Utilities.formatDate(new Date(), "EST", "yyyy/MM/dd");
-  let csvUrl = "https://api.dmginc.gg/v3/csv/download/" + today;
-
-  // Set API Key Headers
-  const headers = {
-    'X-ApiKey': apiKey
-  }
-  const options = {
-    'method': 'get',
-    'headers': headers
-  };
-
-  // Check Error if yes then change date to yesterday
-  try {
-    UrlFetchApp.fetch(csvUrl, options).getResponseCode();
-  }
-  catch (err) {
-    let todays = new Date();
-    let yesterday = new Date(new Date().setDate(todays.getDate() - 1));
-    today = Utilities.formatDate(yesterday, "EST", "yyyy/MM/dd");
-    csvUrl = "https://api.dmginc.gg/v3/csv/download/" + today;
-  }
-  const csvContent = UrlFetchApp.fetch(csvUrl, options).getContentText();
-  const csvData = Utilities.parseCsv(csvContent);
-  
-  // Get only div data
-  const div = relevantData(csvData, csvHeaders.indexOf("division"), division);
-  
-  // Save last join date for initiate log
-  let joinDates = divSheet.getRange('BD2:BD').getValues();
-  const lastJoinDate = new Date(Math.max.apply(null, joinDates.flat()));
-
-  // Write data on CSV sheet
-  csvSheet.clear();
-  csvSheet.getRange(1, 1, csvData.length, csvData[0].length).setValues(csvData);
-
-  // Write backup if current sheet isn't broken
-  if (!csvSheet.getRange(2, 1, 1, 1).isBlank()) {
-    backupSheet.clear();
-    backupSheet.getRange(1, 1, csvData.length, csvData[0].length).setValues(csvData);
-    updateLastExecutionTime(overview);
-  }
-  
-  // Write division data if CSV was successful
-  if(!csvSheet.getRange(2, 1, 1, 1).isBlank()) {
-    divSheet.clear();
-    divSheet.getRange(1, 1, div.length, div[0].length).setValues(div);
-    divSheet.getRange('V2:V').setNumberFormat('@');
-    divSheet.getRange('V2:V').setNumberFormat('yyyy-mm-dd HH:mm');
-    deleteBlankRows(divSheet);
-  }
-
-  // Change Discord mixed format to date
-  csvSheet.getRange('V2:V').setNumberFormat('@');
-  backupSheet.getRange('V2:V').setNumberFormat('@');
-  csvSheet.getRange('V2:V').setNumberFormat('yyyy-mm-dd HH:mm');
-  backupSheet.getRange('V2:V').setNumberFormat('yyyy-mm-dd HH:mm');
-  
-  deleteBlankRows(csvSheet);
-  deleteBlankRows(backupSheet);
+  // Import csv and get last join date from csv data
+  const lastJoinDate = importCSV(apiKey, division, divSheet, csvSheet, backupSheet, overview, csvHeaders);
 
   // Update automated sheets as well
   let errors = [];
@@ -146,9 +87,4 @@ function importCSV(sheetID, division, apiKey) {
     }
     throw new Error(`Following sheets failed to update: ${affectedSheets}check execution logs for details.`);
   }
-}
-
-// Testing
-function lmao() {
-  Logger.log("lmao");
 }
