@@ -11,8 +11,6 @@ function updateInitiateLog(divSheet, initiateLog, inactiveLog, memberLog, last) 
 
   // Find where to paste Initiates
   const firstEmptyRow = initiateLog.getRange(initiateLog.getLastRow(), 1).getNextDataCell(SpreadsheetApp.Direction.UP).getRow() + 1;
-  Logger.log(newInitiates);
-  Logger.log(firstEmptyRow);
 
   // Add new Initiates
   if (newInitiates.length > 0) {
